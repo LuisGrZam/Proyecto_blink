@@ -15,12 +15,14 @@ int FuncionOff();
 int FuncionBlink1();
 int FuncionBlink2();
 int FuncionBlink3();
+int EncenderLEDGradual();
 
 
 unsigned long lastDeTime = 0;
 int LstBSTD = HIGH;    //Último estado predefindo en alto
 int btnSTD = 0;     //Estado presente
 int funcSTD = 0;
+int x=0; //Control de Intensidad del LED
 
 void setup() {
   pinMode(btnIN, INPUT_PULLUP);   //Declarar entrada analógica como alto como bajo de manera indefinida
@@ -32,6 +34,7 @@ void setup() {
 void loop() {
   LecturadeBoton();
   BotondeSeleccion();
+  EncenderLEDGradual();
 }
 
 int LecturadeBoton(){
@@ -89,5 +92,15 @@ int FuncionBlink3(){
     digitalWrite(LED,LOW);
     delay(200);
     digitalWrite(LED,HIGH);
-    
+}
+
+int EncenderLEDGradual(){
+ for(x=0;x<256; x+=5){ //Este ciclo es para encender gradualmente
+ analogWrite(LED,x);   //Encender LED con intensidad establecida en x
+ x = millis();
+ }
+for(x=0;x<256; x-=5){ //Este ciclo es para apagar gradualmente
+ analogWrite(LED,x);   //Encender LED con intensidad establecida en x
+ x = millis();
+}
 }
