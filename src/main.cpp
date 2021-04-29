@@ -89,5 +89,5 @@ int FuncionBlink3(){
     digitalWrite(LED,LOW);
     delay(200);
     digitalWrite(LED,HIGH);
-    \\Cagas
+    
 }
