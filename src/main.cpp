@@ -7,10 +7,10 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 int upButton = 10;
 int downButton = 9;
 int selectButton = 8;
-
 int menu = 1;
-
 int LED = 13;
+int EncenderLEDGradual();
+int x=0;
 
 
 
@@ -24,7 +24,8 @@ void setup() {
   pinMode(selectButton, INPUT_PULLUP);
   
   pinMode(LED, OUTPUT);
-  void updateMenu();
+
+  updateMenu();
 }
 
 
@@ -49,7 +50,7 @@ void loop() {
     updateMenu();
     delay(100);
     while (!digitalRead(selectButton));
-  }  
+  }	
 }
 
 
@@ -101,11 +102,16 @@ void action1() {
   delay(150);
   lcd.print(".");
   
-  digitalWrite(LED, HIGH);
-  
-  delay(500);
-}
+  //digitalWrite(LED, HIGH);
+  //delay(500);
+ 
+  for(x=0;x<256; x+=5){ //Este ciclo es para encender gradualmente
+ analogWrite(LED,x);   //Encender LED con intensidad establecida en x
+delay(70);;
+ }
 
+
+}
 void action2() {
   lcd.clear();
   lcd.print(">Apagar LED");
@@ -116,8 +122,13 @@ void action2() {
   delay(150);
   lcd.print(".");
   
-  digitalWrite(LED, LOW);
+ 
   
-  delay(500);
+  //digitalWrite(LED, LOW);
+ for(x=0;x<256; x-=5){ //Este ciclo es para apagar gradualmente
+ analogWrite(LED,x);   //Encender LED con intensidad establecida en x
+delay(70);
 }
+}
+
 
