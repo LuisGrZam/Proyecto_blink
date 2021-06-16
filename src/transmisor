@@ -1,0 +1,36 @@
+#include <SPI.h>   //Librería de protocolo de comunicación serial
+#include <nRF24L01.h> //Librería correspondiente al módulo de antena
+#include <RF24.h> //Librería correspondiente al módulo de antena
+#include <DHT11.h> //Librería de módulo de sensor de temperatura y humedad
+ 
+int pin = A0;   //Declaración de pin analógico A0
+DHT11 dht11(pin); // Definimos el pin digital donde se conecta el sensor
+float temperature[2]; //Delclaración de variable flotante para temperatura
+ 
+double Fahrenheit(double celsius) {         //En este comando convertimos los grados Fahrenheit a Celsius
+return ((double)(9 / 5) * celsius) + 32;
+}
+ 
+double Kelvin(double celsius) {           //Mostrar por default grados Celsius
+return celsius + 273.15;
+}
+ 
+RF24 radio(8, 9);    //Pin del Arduino conectado al pin Chip Enable (CE) y Chip Select (CS) del módulo
+const uint64_t pipe = 0xE8E8F0F0E1LL;  // Dirección de canal de radio única para que los 2 nodos se comuniquen
+float temp, humi; //Declaración de constantes flotantes para temperatura y humedad
+
+void setup() {
+Serial.begin(9600);   //inicializamos el puerto serie
+radio.begin(); //inicializamos el NRF24L01 
+radio.openWritingPipe(pipe); //Abrir un canal de escritura
+}
+ 
+void loop(void)
+{
+
+dht11.read(humi, temp); //Leer las variables de humedad y temperatura del sensor
+temperature[0] = temp;  // Asignar valor a temp
+temperature[1] = humi;  //Asignar valot a humi
+radio.write(temperature, sizeof(temperature)); //Envio de datos
+delay (1000); //Retardo para cada medición 
+}
